@@ -2,10 +2,10 @@ import {Pool} from 'pg';
 
 const pool= new Pool({
     user: postgres,
-    password: acwksOsQZStBkjmENXkEXsXJKNycHeyy,
-    host: maglev.proxy.rlwy.net,
+    password: xuBJKbJUZHGGfFZHkGLcmvolwWKbCEeY,
+    host: gondola.proxy.rlwy.net,
     database: railway,
-    port: 23575,
+    port: 36019,
     ssl: { rejectUnauthorized: false }
 })
 export default pool;
