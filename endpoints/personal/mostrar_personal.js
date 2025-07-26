@@ -1,5 +1,5 @@
 import {Router} from "express";
-import pool from "../bdConnection.js";
+import pool from "../../bdConnection.js";
 
 const get_personal= async (req , res)=>{
     try{

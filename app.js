@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import router  from "./rutas/rutas.js";
+import "./cron_desactivar_Usuarios.js"//funcion que sirver para cambiar el estado de un cliente el cual tenga mas de un mes sin cancelar 
 
 const app= express();
 app.use(cors());
