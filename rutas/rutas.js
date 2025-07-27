@@ -7,6 +7,7 @@ import get_citas_peluqueria from "../endpoints/citasPeluquerias/mostrar_citasPel
 import post_crear_cliente from "../endpoints/cliente/crear_cliente.js";//para usar el endpoint en donde se crea un cliente desde 0
 import post_crear_personal from "../endpoints/citasPeluquerias/crear_citasPeluqeria.js"; //para usar el endpoint en donde se crea un personal desde 0
 import post_crear_cita_peluqueria from "../endpoints/citasPeluquerias/crear_citasPeluqeria.js"; //para usar el endpoint en donde se crea una cita de peluqueria desde 0
+import post_actividad_gimnasio from "../endpoints/gimnasio/crear_actividad_gimnasio.js"; //para usar el endpoint encargado insertar un usuario a la hora de entrar al gimansio
 
 import delete_eliminar_cliente from "../endpoints/cliente/eliminar_cliente.js";//para usar el endpoint en donde se elimina de MANERA LOGICA el cliente, por ende es un update 
 import delete_eliminar_personal from "../endpoints/personal/eliminar_personal.js"; //para usar el endpoint en donde se elimina de MANERA LOGICA el personal, por ende es un update 
@@ -33,7 +34,7 @@ router.get("/getCliente/:id", get_cliente);
 router.post("/crear_cliente", post_crear_cliente);
 router.post("/crear_personal", post_crear_personal);
 router.post("/crear_cita_peluqueria", post_crear_cita_peluqueria);
-
+router.post("/crear_actividad_gimnasio", post_actividad_gimnasio);
 
                         //DELETE
 router.put("/eliminar_cliente/:id", delete_eliminar_cliente); //se usa put(actualizar) debido que es un borrado logico 
@@ -43,6 +44,8 @@ router.put("/eliminar_personal/:id", delete_eliminar_personal)  //se usa put(act
                         //Update
 router.put("/actualizar_cliente/:id", put_actualizar_cliente);                        
 router.put("/actualizar_pago_cliente/:cedula", put_pago_cliente);
+
+
 router.post("/login",login);
 
 export default router;

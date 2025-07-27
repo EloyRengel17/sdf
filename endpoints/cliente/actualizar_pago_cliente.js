@@ -41,6 +41,7 @@ const put_pago_cliente = async (req, res) => {
       // nueva_fecha_pago: nuevaFecha,
     });
   } catch (err) {
+     await pool.query("ROLLBACK");
     console.log("ha sucedido un error", err);
     res.status(500).json({
       success: false,

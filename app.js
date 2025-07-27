@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import router  from "./rutas/rutas.js";
-import "./cron_desactivar_Usuarios.js"//funcion que sirver para cambiar el estado de un cliente el cual tenga mas de un mes sin cancelar 
+import "./cron_desactivar_Usuarios.js"//funcion que sirver para cambiar el estado de un cliente el cual tenga mas de un mes sin cancelar(se activa de manera automatica)
+import "./cron_hora_salida_cliente.js"// funcion que se encarga de agregar la hora de salida AUTOMATICAMENTE en caso tal que la persona no la haya hecho
 
 const app= express();
 app.use(cors());
