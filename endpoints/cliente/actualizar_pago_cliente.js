@@ -6,26 +6,48 @@ const put_pago_cliente = async (req, res) => {
     const { cedula } = req.body;
     // Iniciar transacción (en caso de error revierte las sentencias y proteje la intrigrad de la base de datos)
     await pool.query("BEGIN");
-
+                                                  // intrucion para casos en donde el cliente AUN tenga ACCESO al gimnasio
     //sql para buscar al cliente por la cedula y en caso de encontrarlo ponerle la proxima fecha de pago un mes
     // despues y poner el estado de pago como'como pago realizado'
-    const sql = `
+    const sql_cliente_activo = `
             UPDATE cliente c
             SET 
             fecha_de_pago = fecha_de_pago + INTERVAL '1 month',
             estado_pago_mes = 'pago realizado'
             FROM datos d
             WHERE c.datos_cliente = d.id
-            AND d.cedula = $1;`;
-    const result = await pool.query(sql, [cedula]);
+            AND d.cedula = $1
+            AND d.estado= true`;
+    const result_cliente_Activo = await pool.query(sql_cliente_activo, [cedula]);
 
+    if(result_cliente_Activo.rowCount===0){
+      const sql_cliente_desactivado= `
+       UPDATE cliente c
+            SET 
+            fecha_de_pago = NOW() + INTERVAL '1 month',
+            estado_pago_mes = 'pago realizado'
+            FROM datos d
+            WHERE c.datos_cliente = d.id
+            AND d.cedula = $1
+            AND d.estado= false;
+      `
+      const result_cliente_desactivado= await pool.query(sql_cliente_desactivado, [cedula]);
+      if(result_cliente_desactivado.rowCount===0){
+        await pool.query("ROLLBACK");
+      return res.status(404).json({
+        success: false,
+        message: "Cliente no encontrado",
+      });
+      }
+    }
+    
     const sql_cambio_estado = `
             UPDATE datos
             set estado=true
             WHERE cedula= $1;
        `;
     const result_estado = await pool.query(sql_cambio_estado, [cedula]);
-    if (result.rowCount === 0 || result_estado.rowCount === 0) {
+    if (result_estado.rowCount === 0) {
       // si entra aqui mediante el roallback revierte todas las sentencias sql
       await pool.query("ROLLBACK");
       return res.status(404).json({

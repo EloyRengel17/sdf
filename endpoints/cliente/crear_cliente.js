@@ -3,9 +3,9 @@ import pool from "../../bdConnection.js";
 import bcrypt from "bcrypt";//libreria para hashear la clave "npm install bcrypt"
 const post_crear_cliente= async (req, res)=>{
     try{
-        const {nombre, apellido, cedula, fecha_nacimiento, clave, horario_actividades, plan}= req.body;
+        const {nombre, apellido, cedula, fecha_nacimiento, clave, horario_actividades, plan, fecha_pago}= req.body;
         //validacion para verificar que no hayan campos vacios 
-        if(!nombre || !apellido || !cedula || !fecha_nacimiento || !clave || !horario_actividades || !plan ){
+        if(!nombre || !apellido || !cedula || !fecha_nacimiento || !clave || !horario_actividades || !plan || !fecha_pago){
             return res.status(404).json({
                 success:false,
                 error:"todos los campos son obligatorios"
@@ -40,9 +40,9 @@ const post_crear_cliente= async (req, res)=>{
 
                 const sql_cliente= `
                 INSERT INTO public.cliente(
-                datos_cliente, plan)
-                VALUES ($1, $2);`
-                const ingresar_cliente= await pool.query(sql_cliente, [datos_id, plan]);
+                datos_cliente, plan, fecha_de_pago)
+                VALUES ($1, $2, $3);`
+                const ingresar_cliente= await pool.query(sql_cliente, [datos_id, plan, fecha_pago]);
 
                 res.json({mensaje:"cliente creado con exito", id: datos_id});
             }    

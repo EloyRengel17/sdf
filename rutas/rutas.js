@@ -3,6 +3,8 @@ import { Router } from "express";
 import get_personal from "../endpoints/personal/mostrar_personal.js";//para usar el endpoint que muestra el personal especifco y general
 import get_cliente from "../endpoints/cliente/mostrar_cliente.js";//para usar el endpoint que muestra el cliente especifco y general
 import get_citas_peluqueria from "../endpoints/citasPeluquerias/mostrar_citasPeluquerias.js"; //para usar el endpoint que muestra las citas especifco y general
+import get_actividad_cliente from "../endpoints/gimnasio/mostrar_actividiad_gimnasio.js";//para usar el endpoint donde muestro la cantidad de personas activas en el gimnasio
+
 
 import post_crear_cliente from "../endpoints/cliente/crear_cliente.js";//para usar el endpoint en donde se crea un cliente desde 0
 import post_crear_personal from "../endpoints/citasPeluquerias/crear_citasPeluqeria.js"; //para usar el endpoint en donde se crea un personal desde 0
@@ -28,6 +30,7 @@ router.get("/getCitas_peluqueria/:nombre", get_citas_peluqueria);
 router.get("/getCliente", get_cliente);
 router.get("/getCliente/:id", get_cliente);
 
+router.get("/getActividad_gimnasio", get_actividad_cliente);
 
 
                         //post
