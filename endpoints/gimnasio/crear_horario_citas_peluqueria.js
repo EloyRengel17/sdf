@@ -1,7 +1,7 @@
 import { Router } from "express";
 import pool from "../../bdConnection.js";
 
-const post_crear_cita_peluqueria=async (req,res)=>{
+const post_crear_horario_peluqueria=async (req,res)=>{
     try{
         const {nombre_peluquero, fecha, hora_inicio, hora_fin, disponible}= req.body;
         if(!nombre_peluquero || !fecha || !hora_inicio || !hora_fin || disponible===undefined){
@@ -28,7 +28,7 @@ const post_crear_cita_peluqueria=async (req,res)=>{
         })
     }
 }
-export default post_crear_cita_peluqueria;
+export default post_crear_horario_peluqueria;
 
 //NOTA IMPORTANTE 
 // En la consulta sql dice d_peluqero, se guarda el id, pero la idea es que se muestre el nombre, por ende dede el frontend deberia traer el id, pero mostrabdo el nombre

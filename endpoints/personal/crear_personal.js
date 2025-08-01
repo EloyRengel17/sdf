@@ -55,3 +55,4 @@ const post_crear_personal= async (req,res )=>{
     });
     }
 }
+export default post_crear_personal;

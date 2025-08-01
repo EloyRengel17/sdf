@@ -1,7 +1,9 @@
 import { Router } from "express";
 import pool from "../../bdConnection.js";
 
-const get_citas_peluqueria = async (req, res )=>{
+//en esa funcion se mostraran los horarios disponibles por cada peluqero, para las personas ES SOLO PARA LOS HORARIOS 
+//OJO, hay otro archivo(POR AHOR ANO CREADO) el cual se encaragara de modificar y gestionar las citas de la peluqueria 
+const get_horario_citas_peluqueria = async (req, res )=>{
     try{
             const {nombre}= req.params;
             if(nombre){
@@ -46,4 +48,4 @@ const get_citas_peluqueria = async (req, res )=>{
         console.log("ha sucedido un error". err);
     }
 }
-export default get_citas_peluqueria;
+export default get_horario_citas_peluqueria;
