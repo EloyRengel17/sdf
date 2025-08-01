@@ -1,7 +1,7 @@
 import { json, Router } from "express";
 import pool from "../../bdConnection.js";
 
-const put_citas_peluquerias= async (req, res)=>{
+const delete_citas_peluquerias= async (req, res)=>{
     try{
             const {id_cita}= req.params;
             const sql_eliminar_cita=`
@@ -27,4 +27,4 @@ const put_citas_peluquerias= async (req, res)=>{
         })
     }
 }
-export default put_citas_peluquerias;
+export default delete_citas_peluquerias;

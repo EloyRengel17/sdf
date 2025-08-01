@@ -17,9 +17,10 @@ import delete_eliminar_personal from "../endpoints/personal/eliminar_personal.js
 
 import put_actualizar_cliente from "../endpoints/cliente/actualizar_cliente.js"; //para usar el endpoint en donde se edita un cliente 
 import put_pago_cliente from "../endpoints/cliente/actualizar_pago_cliente.js"; //para usar el endpoint en donde se edita, registra, actualiza el pago del cliente
-import put_citas_peluquerias from "../endpoints/citasPeluquerias/eliminar_citas_peluqeria.js"; //para usar le endpoint en donde el cliente podra modifcar el estado de su cita (podra canelarla)
 import put_horario_cita from "../endpoints/gimnasio/actualizar_horario_citas.js"; //para usarl endpoint en donde se actualizara o modificara un horario previamente creado
 
+import delete_citas_peluquerias_citas_peluquerias from "../endpoints/citasPeluquerias/eliminar_citas_peluqeria.js"; //para usar le endpoint en donde el cliente podra cancelar la cita previamente creada
+import delete_horario_citas from "../endpoints/gimnasio/eliminar_horario_citas.js"; // para usar el endpoint en donde se eliminara el horario que previamente fue creado por la administracion
 import login from "../endpoints/login.js";//lo uso para poder hacer el login
 
 
@@ -55,8 +56,12 @@ router.put("/eliminar_personal/:id", delete_eliminar_personal)  //se usa put(act
                         //Update
 router.put("/actualizar_cliente/:id", put_actualizar_cliente);                        
 router.put("/actualizar_pago_cliente/:cedula", put_pago_cliente);
-router.put("/actualizar_cita_peluqueria/:id_cita", put_citas_peluquerias);
 router.put("/actualizar_horario_citas/id_horario", put_horario_cita);
+
+
+                        //delete
+router.delete("/eliminar_cita_peluqueria/:id_cita", delete_citas_peluquerias_citas_peluquerias);
+router.delete("/eliminar_horario_cita/:id", delete_horario_citas);
 
 router.post("/login",login);
 
