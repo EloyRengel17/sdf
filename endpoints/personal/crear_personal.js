@@ -4,9 +4,9 @@ import bcrypt from "bcrypt";//libreria para hashear la clave "npm install bcrypt
 
 const post_crear_personal= async (req,res )=>{
     try{
-         const {nombre, apellido, cedula, fecha_nacimiento, clave, horario_actividades, rol, foto}= req.body;
+         const {nombre, apellido, cedula, fecha_nacimiento, clave, horario_actividades, rol, foto, altura, peso, skills, informacion}= req.body;
           //validacion para verificar que no hayan campos vacios
-         if(!nombre || !apellido || !cedula || !fecha_nacimiento || !clave || !horario_actividades || !rol || !foto){
+         if(!nombre || !apellido || !cedula || !fecha_nacimiento || !clave || !horario_actividades || !rol || !foto || !altura || !peso || !skills || !informacion){
          return  res.status(404).json({
                 success:false,
                 error:"todos los campos son obligatorios"
@@ -41,9 +41,9 @@ const post_crear_personal= async (req,res )=>{
 
                     const sql_cliente= `
                     INSERT INTO public.personal(
-                    datos_personal, rol, foto)
-                    VALUES ($1, $2, $3);`
-                    const ingresar_cliente= await pool.query(sql_cliente, [datos_id,rol, foto]);
+                    datos_personal, rol, foto, altura, peso, skills, informacion)
+                    VALUES ($1, $2, $3, $4, 5$, 6$, 7$);`
+                    const ingresar_cliente= await pool.query(sql_cliente, [datos_id,rol, foto,altura, peso, skills, informacion]);
 
                     res.json({mensaje:"Personal creado con exito", id: datos_id});
             }

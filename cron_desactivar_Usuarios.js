@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import pool from "./bdConnection.js";
 
-cron.schedule("06 13 * * *", async () => {
+cron.schedule("33 8 * * *", async () => {
   try {
     //la variable sql_corte1 es para comprobar si tu estado de mes esta en "por pagar" y comprobar si ya hay mas de 30 dias y cortar el acceso al gimnasio
     const sql_corte1 = `

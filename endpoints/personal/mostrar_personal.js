@@ -6,7 +6,7 @@ const get_personal= async (req , res)=>{
         const {id}= req.params;
         if(id){
             //buscar datos por id especifico
-            const sql=`SELECT personal.id, datos.nombre, datos.apellido, datos.cedula, datos.fecha_nacimiento, datos.horario_actividades, personal.rol, personal.foto
+            const sql=`SELECT personal.id, datos.nombre, datos.apellido, datos.cedula, datos.fecha_nacimiento, datos.horario_actividades, personal.rol, personal.foto, personal.altura, personal.peso, personal.skills, personal.informacion
             FROM personal
             JOIN datos ON personal.datos_personal= datos.id
             WHERE personal.id=$1`;
@@ -21,7 +21,7 @@ const get_personal= async (req , res)=>{
              return res.json(result.rows[0]);
         }else{
             //mostrar todo el personal
-            const sql=`SELECT personal.id, datos.nombre, datos.cedula, personal.rol
+            const sql=`SELECT personal.id, datos.nombre, datos.apellido, datos.cedula, datos.fecha_nacimiento, datos.horario_actividades, personal.rol, personal.foto, personal.altura, personal.peso, personal.skills, personal.informacion
              FROM personal
              JOIN datos ON personal.datos_personal= datos.id
              `;

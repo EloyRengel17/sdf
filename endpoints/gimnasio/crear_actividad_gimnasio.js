@@ -1,49 +1,78 @@
-import { Router } from "express";
 import pool from "../../bdConnection.js";
 
 const post_actividad_gimnasio = async (req, res) => {
   try {
-    const { cedula_cliente } = req.params;
-    //comprobar que la cedula no venga en blanco o mal formada
-    if(!cedula_cliente){
-        return res.status(409).json({
-            success: false,
-            error:"La cedula del cliente es requerida."
-        });
+    const { cedula_cliente } = req.body;
+    //comprobamos qe la cedula no venga en blanco
+    if (!cedula_cliente) {
+      return res.status(409).json({
+        success: false,
+        error: "La cédula del cliente es requerida."
+      });
     }
-   // Iniciar transacción (en caso de error revierte las sentencias y proteje la intrigrad de la base de datos)
-    await pool.query("BEGIN");
-    //sql para comprobar que la cedula este en la base de datos y cumpla con todos los requisitos
-    const sql_comprobacion = `
-                    SELECT id
-                    FROM datos
-                    Where  cedula=$1 and
-                    estado = true;
-            `;
-            const result_comprobacion= await pool.query(sql_comprobacion,[cedula_cliente]);
 
-                if(result_comprobacion.rowCount===0){
-                   // si entra aqui mediante el roallback revierte todas las sentencias sql
-                    await pool.query("ROLLBACK");
-                    return res.status(409).json({
-                        success: false,
-                        error: "El usuario no está registrado en el sistema o tiene pagos pendientes."
-                    })
-                }
-                //almaceno el id del cliente para luego insertarlo en la tabla de la actividad del gimnasio
-                const id_cliente= result_comprobacion.rows[0].id;
-                //sql para la insercion de los clientes den la tabal de actividad del gimnasio
-                const  sql_ingresar= `
-                    INSERT INTO public.clientes_activos(
-                    hora_entrada, id_cliente, hora_salida)
-                    VALUES ( NOW(), $2, NULL);
-                `
-                const result_ingresar= await pool.query(sql_ingresar,[id_cliente]);
-                // Confirmar transacción
-                await pool.query("COMMIT");
-                res.json({mensaje:"cliente creado con exito"});
+    await pool.query("BEGIN");
+
+    // Verificar si el cliente está registrado y activo
+    const sql_comprobacion = `
+      SELECT c.id
+      FROM cliente c
+      JOIN datos d ON d.id = c.datos_cliente
+      WHERE d.cedula = $1 AND d.estado = true;
+    `;
+    const result_comprobacion = await pool.query(sql_comprobacion, [cedula_cliente]);
+
+    if (result_comprobacion.rowCount === 0) {
+      await pool.query("ROLLBACK");
+      return res.status(409).json({
+        success: false,
+        error: "El usuario no está registrado o tiene pagos pendientes."
+      });
+    }
+
+    const id_cliente = result_comprobacion.rows[0].id;
+
+    // Verificar si el cliente tiene una sesión abierta
+    const sql_comprobacion_salida = `
+      SELECT id_clientes_activos 
+      FROM public.clientes_activos 
+      WHERE id_cliente = $1 AND hora_salida IS NULL
+      ORDER BY hora_entrada DESC
+      LIMIT 1;
+    `;
+    const result_comprobacion_salida = await pool.query(sql_comprobacion_salida, [id_cliente]);
+
+    if (result_comprobacion_salida.rowCount === 0) {
+      // No hay sesión abierta hay que iniciar una nueva
+      const sql_ingresar = `
+        INSERT INTO public.clientes_activos(hora_entrada, id_cliente, hora_salida)
+        VALUES (NOW(), $1, NULL);
+      `;
+      await pool.query(sql_ingresar, [id_cliente]);
+      await pool.query("COMMIT");
+      return res.json({
+      success: true,
+      message: "Sesión iniciada con éxito"
+    });
+
+    } else {
+      // Hay sesión abierta hay que cerrarla
+      const sesion_id = result_comprobacion_salida.rows[0].id_clientes_activos;
+      const sql_salida = `
+        UPDATE public.clientes_activos
+        SET hora_salida = NOW()
+        WHERE id_clientes_activos = $1;
+      `;
+      await pool.query(sql_salida, [sesion_id]);
+      await pool.query("COMMIT");
+     return res.json({
+      success: true,
+      message: "Sesión cerrada con éxito"
+    });
+    }
+
   } catch (err) {
-     await pool.query("ROLLBACK");
+    try { await pool.query("ROLLBACK"); } catch(e) { console.log("Error rollback", e); }
     console.log("Ha sucedido un error", err);
     res.status(500).json({
       success: false,
@@ -53,3 +82,5 @@ const post_actividad_gimnasio = async (req, res) => {
 };
 
 export default post_actividad_gimnasio;
+
+

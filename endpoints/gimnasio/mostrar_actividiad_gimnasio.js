@@ -6,11 +6,14 @@ const get_cantidad_clientes_activos = async (req, res) => {
     //sql valido para mostrar la cantidad de rows que hay cumpliendo la sentencia 
     const sql = `
       SELECT COUNT(*) AS cantidad
-      FROM public.clientes_activos ca
+      FROM public.cliente c
+      JOIN public.clientes_activos ca 
+        ON ca.id_cliente = c.id
       WHERE ca.hora_salida IS NULL
-      AND ca.id_cliente NOT IN (
-        SELECT datos_personal FROM personal
-      );
+        AND c.datos_cliente NOT IN (
+          SELECT datos_personal FROM personal
+  );
+
     `;
 
     const result = await pool.query(sql);
